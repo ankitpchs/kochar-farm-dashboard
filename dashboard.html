@@ -603,7 +603,7 @@
         // Load today's tasks
         async function loadTodaysTasks() {
             try {
-                const response = await fetch('http://localhost:3000/todaytasks');
+                const response = await fetch('/todaytasks');
                 const data = await response.json();
                 
                 if (data.success) {
