@@ -20,7 +20,7 @@ const SPREADSHEET_ID = "12uYiz9kCy4344iMSy3qxh3DGaQch-W5a0i_enyGw14k";
 
 // 👉 TEST ROUTE
 app.get("/", (req, res) => {
-  res.send("Server is working ✅");
+  res.sendFile(__dirname + "/dashboard.html");
 });
 
 // 👉 GET TODO LIST DATA (with all sheets)
