@@ -500,7 +500,7 @@
         // Load work progress
         async function loadWorkProgress() {
             try {
-                const response = await fetch('http://localhost:3000/worktracker');
+                const response = await fetch('/worktracker')
                 const data = await response.json();
                 
                 if (data.success) {
@@ -694,7 +694,7 @@
         // Load vendors (for Vendor Status tab)
         async function loadVendors() {
             try {
-                const response = await fetch('http://localhost:3000/ask?q=which%20vendors%20are%20not%20finalized');
+                const response = await fetch('/vendors')
                 const data = await response.text();
                 displayVendors(data);
             } catch (error) {
