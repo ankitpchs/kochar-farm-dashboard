@@ -10,7 +10,9 @@ const app = express();
 app.use(express.static(__dirname));
 
 const auth = new google.auth.GoogleAuth({
-  keyFile: "./credentials.json",   // must match file name
+  keyFile: process.env.NODE_ENV === "production"
+    ? "/etc/secrets/credentials.json"
+    : "./credentials.json",
   scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
 });
 
