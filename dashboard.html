@@ -693,15 +693,15 @@
         
         // Load vendors (for Vendor Status tab)
         async function loadVendors() {
-            try {
-                const response = await fetch('/todo');
-                const data = await response.json();
-displayVendors(data.packages);
-
-            } catch (error) {
-                document.getElementById('vendors-list').innerHTML = '<li>Error loading vendors</li>';
-            }
-        }
+  try {
+    const response = await fetch('/ask?q=which vendors are not finalized');
+    const data = await response.text();
+    displayVendors(data);
+  } catch (error) {
+    document.getElementById('vendors-list').innerHTML =
+      '<li>Error loading vendors</li>';
+  }
+}
         
         // Load materials
         async function loadMaterials() {
