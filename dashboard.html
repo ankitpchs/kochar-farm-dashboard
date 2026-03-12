@@ -840,7 +840,9 @@ displayVendors(data.packages);
             addBotMessage('Thinking... ⏳');
             
             try {
-                const response = await fetch(`http://localhost:3000/ask?q=${encodeURIComponent(question)}`);
+                const response = await fetch(
+  `/ask?q=${encodeURIComponent(question)}`
+);
                 const answer = await response.text();
                 
                 // Remove loading message
