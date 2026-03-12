@@ -697,7 +697,7 @@
                 const response = await fetch('/todo');
                 const data = await response.json();
 displayVendors(data.packages);
-                displayVendors(data);
+
             } catch (error) {
                 document.getElementById('vendors-list').innerHTML = '<li>Error loading vendors</li>';
             }
