@@ -694,7 +694,7 @@
         // Load vendors (for Vendor Status tab)
         async function loadVendors() {
             try {
-                const response = await fetch('/vendors')
+                const response = await fetch('/vendors');
                 const data = await response.text();
                 displayVendors(data);
             } catch (error) {
