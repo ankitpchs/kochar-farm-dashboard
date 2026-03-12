@@ -706,7 +706,7 @@ displayVendors(data.packages);
         // Load materials
         async function loadMaterials() {
             try {
-                const response = await fetch('http://localhost:3000/ask?q=which%20materials%20are%20pending');
+                const response = await fetch('/ask?q=which%20materials%20are%20pending');
                 const data = await response.text();
                 displayMaterials(data);
             } catch (error) {
