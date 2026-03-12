@@ -692,11 +692,14 @@
         }
         
         // Load vendors (for Vendor Status tab)
-        async function loadVendors() {
+       async function loadVendors() {
   try {
     const response = await fetch('/ask?q=which vendors are not finalized');
     const data = await response.text();
-    displayVendors(data);
+
+    document.getElementById('vendors-list').innerHTML =
+      '<li>' + data + '</li>';
+
   } catch (error) {
     document.getElementById('vendors-list').innerHTML =
       '<li>Error loading vendors</li>';
