@@ -663,23 +663,44 @@ function parseDate(dateString) {
 // Helper: Determine priority
 function determinePriority(status, delayDays, progressHistory) {
   if (status === "Completed") return "LOW";
-  
+
+  if (status === "Upcoming" && delayDays > 0) return "CRITICAL";
+  if (status === "Upcoming") return "HIGH";
+
+  if (status === "Hold" && delayDays > 7) return "CRITICAL";
+  if (status === "Hold" && delayDays > 0) return "HIGH";
+  if (status === "Hold") return "MEDIUM";
+
   if (status === "Not Started" && delayDays > 0) return "CRITICAL";
   if (status === "Not Started") return "HIGH";
-  
+
   if (status === "WIP" && delayDays > 7) return "CRITICAL";
   if (status === "WIP" && delayDays > 0) return "HIGH";
   if (status === "WIP") return "MEDIUM";
-  
+
   return "LOW";
 }
 
 // Helper: Generate AI Analysis
 function generateAIAnalysis(particular, status, delayDays, progressHistory) {
   let analysis = "";
-  
+
   if (status === "Completed") {
     analysis = `✅ Task completed successfully. ${delayDays === 0 ? "Finished on schedule!" : `Completed ${Math.abs(delayDays)} days ${delayDays > 0 ? "late" : "early"}.`}`;
+  } else if (status === "Upcoming") {
+    if (delayDays > 0) {
+      analysis = `🔴 CRITICAL: Task should have started ${Math.abs(delayDays)} days ago! Immediate action required.`;
+    } else {
+      analysis = `⏸️ Task upcoming. Monitor closely to ensure timely initiation.`;
+    }
+  } else if (status === "Hold") {
+    if (delayDays > 7) {
+      analysis = `🔴 CRITICAL: Work is on hold and ${delayDays} days behind schedule. Urgent intervention needed.`;
+    } else if (delayDays > 0) {
+      analysis = `🟡 HIGH: Work is on hold with ${delayDays} days delay. Investigate and resolve blocker.`;
+    } else {
+      analysis = `⏸️ Work is on hold. Identify and resolve the reason for hold before schedule slips.`;
+    }
   } else if (status === "Not Started") {
     if (delayDays > 0) {
       analysis = `🔴 CRITICAL: Task should have started ${Math.abs(delayDays)} days ago! Immediate action required.`;
@@ -695,7 +716,7 @@ function generateAIAnalysis(particular, status, delayDays, progressHistory) {
       analysis = `🟢 On track! Continue current progress to maintain schedule.`;
     }
   }
-  
+
   return analysis;
 }
 
@@ -703,6 +724,12 @@ function generateAIAnalysis(particular, status, delayDays, progressHistory) {
 function generateActionItem(particular, status, delayDays, dependency) {
   if (status === "Completed") {
     return `✅ No action needed - task completed.`;
+  } else if (status === "Upcoming" && delayDays > 0) {
+    return `🚨 URGENT: Start ${particular} immediately. Dependent on: ${dependency}. Escalate to project manager.`;
+  } else if (status === "Upcoming") {
+    return `⏳ Prepare for ${particular}. Confirm all dependencies met with ${dependency}.`;
+  } else if (status === "Hold") {
+    return `🔍 Investigate why ${particular} is on hold. Resolve blocker with ${dependency} and resume work.`;
   } else if (status === "Not Started" && delayDays > 0) {
     return `🚨 URGENT: Start ${particular} immediately. Dependent on: ${dependency}. Escalate to project manager.`;
   } else if (status === "Not Started") {
