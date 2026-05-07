@@ -715,7 +715,7 @@
         // Load vendors (for Vendor Status tab)
         async function loadVendors() {
             try {
-                const response = await fetch('/ask?q=which vendors are not finalized, list them by category');
+                const response = await fetch('/ask?q=from the vendor list sheet, list all items where vendor is not finalized (TBD or Pending). For each item show: item name and vendor name or contact if available. Group by category.');
                 const data = await response.text();
                 document.getElementById('vendors-list').innerHTML = markdownToHtml(data);
             } catch (error) {
