@@ -434,7 +434,7 @@
         <div id="vendors" class="tab-content">
             <div class="main-content">
                 <div class="card">
-                    <h2>👥 Vendors Not Finalized</h2>
+                    <h2>👥 Vendor Status</h2>
                     <div class="card-content">
                         <ul class="item-list" id="vendors-list">
                             <li class="loading">Loading...</li>
@@ -715,7 +715,7 @@
         // Load vendors (for Vendor Status tab)
         async function loadVendors() {
             try {
-                const response = await fetch('/ask?q=from the vendor list sheet, list all items where vendor is not finalized (TBD or Pending). For each item show: item name and vendor name or contact if available. Group by category.');
+                const response = await fetch('/ask?q=from the vendor list sheet, show ALL vendors with their status. Group into two sections: 1) Finalized/Hired vendors 2) Not finalized vendors (TBD or Pending). For each show item name and vendor name.');
                 const data = await response.text();
                 document.getElementById('vendors-list').innerHTML = markdownToHtml(data);
             } catch (error) {
