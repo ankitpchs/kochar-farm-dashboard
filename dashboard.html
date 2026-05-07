@@ -691,42 +691,47 @@
             container.innerHTML = html;
         }
         
+        // Convert markdown to clean HTML
+        function markdownToHtml(text) {
+            let html = '';
+            for (let line of text.split('\n')) {
+                line = line.trim();
+                if (!line) { html += '<div style="height:6px"></div>'; continue; }
+                const inline = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                if (line.startsWith('# ')) {
+                    html += `<div style="font-size:15px;font-weight:bold;color:#333;margin-bottom:8px;padding-bottom:6px;border-bottom:2px solid #667eea">${line.slice(2)}</div>`;
+                } else if (line.startsWith('## ')) {
+                    html += `<div style="font-weight:bold;color:#444;margin:10px 0 4px">${line.slice(3)}</div>`;
+                } else if (line.startsWith('- ') || line.startsWith('• ')) {
+                    const content = line.slice(2).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                    html += `<div style="padding:6px 10px;border-left:3px solid #667eea;margin-bottom:5px;background:#f9f9f9;border-radius:4px;color:#333">${content}</div>`;
+                } else {
+                    html += `<div style="color:#555;margin:4px 0">${inline}</div>`;
+                }
+            }
+            return html;
+        }
+
         // Load vendors (for Vendor Status tab)
-       async function loadVendors() {
-  try {
-    const response = await fetch('/ask?q=which vendors are not finalized');
-    const data = await response.text();
+        async function loadVendors() {
+            try {
+                const response = await fetch('/ask?q=which vendors are not finalized, list them by category');
+                const data = await response.text();
+                document.getElementById('vendors-list').innerHTML = markdownToHtml(data);
+            } catch (error) {
+                document.getElementById('vendors-list').innerHTML = '<li>Error loading vendors</li>';
+            }
+        }
 
-    document.getElementById('vendors-list').innerHTML =
-      '<li>' + data + '</li>';
-
-  } catch (error) {
-    document.getElementById('vendors-list').innerHTML =
-      '<li>Error loading vendors</li>';
-  }
-}
-        
         // Load materials
         async function loadMaterials() {
             try {
-                const response = await fetch('/ask?q=which%20materials%20are%20pending');
+                const response = await fetch('/ask?q=which materials are pending, list them by category');
                 const data = await response.text();
-                displayMaterials(data);
+                document.getElementById('materials-list').innerHTML = markdownToHtml(data);
             } catch (error) {
                 document.getElementById('materials-list').innerHTML = '<li>Error loading materials</li>';
             }
-        }
-        
-        // Display vendors
-        function displayVendors(data) {
-            const list = document.getElementById('vendors-list');
-            list.innerHTML = `<li><strong>Status:</strong> <span>${data.substring(0, 300)}...</span></li>`;
-        }
-        
-        // Display materials
-        function displayMaterials(data) {
-            const list = document.getElementById('materials-list');
-            list.innerHTML = `<li><strong>Status:</strong> <span>${data.substring(0, 300)}...</span></li>`;
         }
         
         // Chat functions
